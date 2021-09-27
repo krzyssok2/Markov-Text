@@ -36,14 +36,44 @@ namespace MarkovText
             return str;
         }
 
-        public void ExecuteMarkovText(string[] words, int nGram)
+        public Dictionary<string, List<string>> BuildDictionary(string[] words)
         {
-            if(nGram==0)
+            var keyValuePairs = new Dictionary<string, List<string>>();
+
+            for(int i=0;i<words.Length;i++)
+            {
+                if(i==words.Length-1)
+                {
+                    if (keyValuePairs.ContainsKey(words[i])) break;
+                    keyValuePairs.Add(words[i], new List<string> { words[0] });
+                    break;
+                }
+                if(!keyValuePairs.ContainsKey(words[i]))
+                {
+                    keyValuePairs.Add(words[i], new List<string> { words[i + 1] });
+                }
+                else
+                {
+                    var list = keyValuePairs[words[i]];
+                    if(!list.Contains(words[i+1]))
+                    {
+                        list.Add(words[i + 1]);
+                        keyValuePairs[words[i]] = list;
+                    }
+                }
+            }
+
+            return keyValuePairs;
+        }
+
+        public void ExecuteMarkovText(string[] words, int nGram, Dictionary<string, List<string>> keyValuePairs)
+        {
+            if (nGram == 0)
             {
                 Console.WriteLine("Ngram can't more less than 1");
                 return;
             }
-            if(words.Length <= nGram)
+            if (words.Length <= nGram)
             {
                 Console.WriteLine("Amount of words can't be less or equal to nGram");
                 return;
@@ -55,13 +85,29 @@ namespace MarkovText
             {
                 var randomInt = random.Next(0, words.Length - 1 - nGram);
 
-                for(int i=randomInt;i<randomInt+nGram;i++)
+                var word = words[randomInt];
+                Console.Write(word + " ");
+                for (int i = 0; i < nGram-1; i++)
                 {
-                    Console.Write(words[i] + " ");
+                    var nextWord = RandomWordFromTheList(keyValuePairs[word]);
+                    Console.Write(nextWord + " ");
+                    word = nextWord;
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(1);
             }
+        }
+
+        private string RandomWordFromTheList(List<string> list)
+        {
+            var random = new Random((int)DateTime.Now.Ticks);
+
+            var lenght = list.Count;
+
+            var index = random.Next(0, lenght);
+
+            return list[index];
+            
         }
     }
 }
