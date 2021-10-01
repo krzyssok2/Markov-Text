@@ -55,11 +55,8 @@ namespace MarkovText
                 else
                 {
                     var list = keyValuePairs[words[i]];
-                    if(!list.Contains(words[i+1]))
-                    {
-                        list.Add(words[i + 1]);
-                        keyValuePairs[words[i]] = list;
-                    }
+                    list.Add(words[i + 1]);
+                    keyValuePairs[words[i]] = list;
                 }
             }
 
@@ -94,7 +91,7 @@ namespace MarkovText
                     word = nextWord;
                 }
 
-                Thread.Sleep(1);
+                Thread.Sleep(100);
             }
         }
 

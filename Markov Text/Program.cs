@@ -7,11 +7,8 @@ namespace MarkovText
     {
         static void Main(string[] args)
         {
-            var file = @"D:\Users\MasterUser\Desktop\Information theory\Ipsum.txt";
-            var nGram = 5;
-
-            Console.WriteLine("Ksystof Stanislav Sokolovski Prifs 18/5 Markov Text");
-            Console.WriteLine("nGram = " + nGram.ToString() + "\n");
+            var file = @"";
+            var nGram = 50;
 
             HelperFunctions functionService = new();
 
